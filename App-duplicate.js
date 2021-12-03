@@ -36,7 +36,9 @@ const HomeTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const LoginTabScreen = ({route}) => {
+  console.log('login tab screen', route.params);
   const {setLogin} = route.params;
+  console.log(setLogin);
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -67,6 +69,7 @@ const LoginTabScreen = ({route}) => {
 };
 
 function CustomDrawerContent({setLogin, props}) {
+  console.log('drawer ' + setLogin);
   return (
     <DrawerContentScrollView
       {...props}
@@ -87,14 +90,16 @@ function CustomDrawerContent({setLogin, props}) {
 
 const HomeDrawerScreen = ({route}) => {
   const {setLogin} = route.params;
+  console.log('drawer ' + setLogin);
   return (
     <Drawer.Navigator
       drawerContent={props => (
         <CustomDrawerContent setLogin={setLogin} props={props} />
       )}>
       <Drawer.Screen
-        name="Home"
+        name="HomeStackScreen"
         component={HomeScreen}
+        title="Home"
         options={{
           drawerLabel: 'Home',
           drawerIcon: ({color, size}) => (
@@ -106,7 +111,7 @@ const HomeDrawerScreen = ({route}) => {
         name="Settings"
         component={SettingScreen}
         options={{
-          drawerLabel: 'Settings',
+          drawerLabel: 'Setting',
           drawerIcon: ({color, size}) => (
             <Icon name="setting" color={color} size={size} />
           ),
@@ -162,13 +167,17 @@ const App = () => {
     setTimeout(() => setLoading(false), 2000);
   }, []);
 
+  useEffect(() => {
+    console.log('useEffect ' + login);
+  }, [login]);
+
   if (loading) {
     return <Loading />;
   }
 
-  return (
-    <NavigationContainer>
-      {login === false ? (
+  if (!login) {
+    return (
+      <NavigationContainer>
         <LoginStack.Navigator>
           <LoginStack.Screen
             name="LoginTabScreen"
@@ -183,38 +192,44 @@ const App = () => {
           />
           <LoginStack.Screen name="HomeScreen" component={HomeScreen} />
         </LoginStack.Navigator>
-      ) : Platform.OS === 'android' ? (
-        <HomeStack.Navigator>
-          <HomeStack.Screen
-            name="HomeDrawerScreen"
-            component={HomeDrawerScreen}
-            initialParams={{setLogin}}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen name="Details" component={DetailScreen} />
-          <HomeStack.Screen name="Options" component={OptionScreen} />
-        </HomeStack.Navigator>
-      ) : (
-        <HomeStack.Navigator>
-          <HomeStack.Screen
-            name="Home"
-            component={HomeTabScreen}
-            initialParams={{setLogin}}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Details"
-            component={DetailScreen}
-            options={{headerBackTitle: 'Home'}}
-          />
-          <HomeStack.Screen
-            name="Options"
-            component={OptionScreen}
-            headerBackTitle="Home"
-            options={{headerBackTitle: 'Home'}}
-          />
-        </HomeStack.Navigator>
-      )}
+      </NavigationContainer>
+    );
+  }
+
+  return Platform.OS === 'android' ? (
+    <NavigationContainer>
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="Home"
+          component={HomeDrawerScreen}
+          initialParams={{setLogin}}
+          options={{headerShown: false}}
+        />
+        <HomeStack.Screen name="Details" component={DetailScreen} />
+        <HomeStack.Screen name="Options" component={OptionScreen} />
+      </HomeStack.Navigator>
+    </NavigationContainer>
+  ) : (
+    <NavigationContainer>
+      <HomeStack.Navigator>
+        <HomeStack.Screen
+          name="Home"
+          component={HomeTabScreen}
+          initialParams={{setLogin}}
+          options={{headerShown: false}}
+        />
+        <HomeStack.Screen
+          name="Details"
+          component={DetailScreen}
+          options={{headerBackTitle: 'Home'}}
+        />
+        <HomeStack.Screen
+          name="Options"
+          component={OptionScreen}
+          headerBackTitle="Home"
+          options={{headerBackTitle: 'Home'}}
+        />
+      </HomeStack.Navigator>
     </NavigationContainer>
   );
 };
