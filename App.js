@@ -13,7 +13,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import {Platform, View} from 'react-native';
+import {Platform, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import Loading from './screens/Loading';
