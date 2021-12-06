@@ -8,31 +8,23 @@
 
 import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
-  createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
+import {Platform, View} from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 import Loading from './screens/Loading';
 import LoginScreen from './screens/LoginScreen';
 import PasswordResetScreen from './screens/PasswordResetScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import Icon from 'react-native-vector-icons/AntDesign';
 import HomeScreen from './screens/HomeScreen';
-import {Platform, View} from 'react-native';
 import DetailScreen from './screens/DetailScreen';
 import OptionScreen from './screens/OptionScreen';
 import SettingScreen from './screens/SettingScreen';
-
-const LoginStack = createNativeStackNavigator();
-const HomeStack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-const HomeTab = createBottomTabNavigator();
-const Drawer = createDrawerNavigator();
+import {LoginStack, HomeStack, Tab, HomeTab, Drawer} from './constants';
 
 const LoginTabScreen = ({setLogin}) => {
   return (
@@ -67,7 +59,7 @@ function CustomDrawerContent({setLogin, props}) {
   return (
     <DrawerContentScrollView
       {...props}
-      contentContainerStyle={{flex: 1, justifyContent: 'space-between'}}>
+      contentContainerStyle={styles.customContainer}>
       <View>
         <DrawerItemList {...props} />
       </View>
@@ -208,5 +200,9 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  customContainer: {flex: 1, justifyContent: 'space-between'},
+});
 
 export default App;
