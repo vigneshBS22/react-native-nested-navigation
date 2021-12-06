@@ -27,7 +27,6 @@ import {Platform, View} from 'react-native';
 import DetailScreen from './screens/DetailScreen';
 import OptionScreen from './screens/OptionScreen';
 import SettingScreen from './screens/SettingScreen';
-import {isLogicalExpression} from '@babel/types';
 
 const LoginStack = createNativeStackNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -35,22 +34,20 @@ const Tab = createBottomTabNavigator();
 const HomeTab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-const LoginTabScreen = ({route}) => {
-  const {setLogin} = route.params;
+const LoginTabScreen = ({setLogin}) => {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="LoginScreen"
-        component={LoginScreen}
         options={{
           headerShown: false,
           tabBarLabel: 'Login',
           tabBarIcon: ({color, size}) => (
             <Icon name="login" color={color} size={size} />
           ),
-        }}
-        initialParams={{setLogin}}
-      />
+        }}>
+        {props => <LoginScreen {...props} setLogin={setLogin} />}
+      </Tab.Screen>
       <Tab.Screen
         name="Register"
         component={RegisterScreen}
@@ -85,8 +82,7 @@ function CustomDrawerContent({setLogin, props}) {
   );
 }
 
-const HomeDrawerScreen = ({route}) => {
-  const {setLogin} = route.params;
+const HomeDrawerScreen = ({setLogin}) => {
   return (
     <Drawer.Navigator
       drawerContent={props => (
@@ -116,8 +112,7 @@ const HomeDrawerScreen = ({route}) => {
   );
 };
 
-const HomeTabScreen = ({route}) => {
-  const {setLogin} = route.params;
+const HomeTabScreen = ({setLogin}) => {
   return (
     <HomeTab.Navigator>
       <HomeTab.Screen
@@ -172,10 +167,9 @@ const App = () => {
         <LoginStack.Navigator>
           <LoginStack.Screen
             name="LoginTabScreen"
-            component={LoginTabScreen}
-            options={{headerShown: false}}
-            initialParams={{setLogin}}
-          />
+            options={{headerShown: false}}>
+            {props => <LoginTabScreen {...props} setLogin={setLogin} />}
+          </LoginStack.Screen>
           <LoginStack.Screen
             name="PasswordReset"
             component={PasswordResetScreen}
@@ -187,21 +181,17 @@ const App = () => {
         <HomeStack.Navigator>
           <HomeStack.Screen
             name="HomeDrawerScreen"
-            component={HomeDrawerScreen}
-            initialParams={{setLogin}}
-            options={{headerShown: false}}
-          />
+            options={{headerShown: false}}>
+            {props => <HomeDrawerScreen {...props} setLogin={setLogin} />}
+          </HomeStack.Screen>
           <HomeStack.Screen name="Details" component={DetailScreen} />
           <HomeStack.Screen name="Options" component={OptionScreen} />
         </HomeStack.Navigator>
       ) : (
         <HomeStack.Navigator>
-          <HomeStack.Screen
-            name="Home"
-            component={HomeTabScreen}
-            initialParams={{setLogin}}
-            options={{headerShown: false}}
-          />
+          <HomeStack.Screen name="Home" options={{headerShown: false}}>
+            {props => <HomeTabScreen {...props} setLogin={setLogin} />}
+          </HomeStack.Screen>
           <HomeStack.Screen
             name="Details"
             component={DetailScreen}

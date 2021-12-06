@@ -1,9 +1,7 @@
 import React from 'react';
 import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 
-const LoginScreen = ({route, navigation}) => {
-  const {setLogin} = route.params;
-  setLogin(false);
+const LoginScreen = ({setLogin, navigation}) => {
   return (
     <View style={styles.container}>
       <Text>This is the Login Screen</Text>
